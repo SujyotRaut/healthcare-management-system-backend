@@ -1,0 +1,121 @@
+*** User ***
+id: string
+firstName: string
+lastName: string
+username: string [unique]
+password: string
+dateOfBirth: date
+contact: string
+email: string
+city: string
+address: string
+role: [admin | doctor | staff | patient]
+
+*** Doctor ***
+id: string
+firstName: string
+lastName: string
+dateOfBirth: date
+contact: string
+email: string
+qualification: string
+specilization: string
+experience: string
+
+*** Staff ***
+id: string
+firstName: string
+lastName: string
+dateOfBirth: date
+contact: string
+email: string
+qualification: string
+experience: string
+
+*** Ward ***
+id: string
+name: string [unique]
+description: string
+
+*** Room ***
+id: string
+roomNo: number
+ward: Ward
+description: string
+
+*** Bed ***
+id: string
+bedNo: number
+room: Room
+description: string
+
+*** Medicine ***
+id: string
+name: string
+companyName: string
+price: number
+status: string
+description: string
+
+*** Insurance ***
+id: string
+name: string
+companyName: string
+patientName: string
+amount: number
+endDate: date
+
+*** DoctorSchedule ***
+id: string
+doctor: Doctor
+date: date
+timing: string
+city: string
+address: string
+
+*** StaffSchedule ***
+id: string
+staffName: string
+date: date
+timing: string
+wardName: string
+roomNo: number
+
+*** Appointment ***
+id: string
+patientName: string
+doctor: Doctor
+date: date
+alergy: string
+
+*** Prescription ***
+id: string
+name: string
+date: date
+prescription: string
+
+*** TestReport ***
+id: string
+patientName: string
+doctorName: string
+date: date
+testReport: string
+description: string
+
+*** Patient ***
+id: string
+patientName: string
+doctorName: string
+wardName: string
+roomNo: number
+bedNo: number
+date: date
+desease: string
+status: string
+
+*** Bill ***
+id: string
+patientName: string
+amount: number
+status: string
+description: string

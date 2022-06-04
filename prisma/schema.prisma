@@ -1,0 +1,188 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model UserRole {
+  role String @unique
+  user User[]
+}
+
+model User {
+  id String @id @default(uuid())
+  firstName String
+  lastName String
+  username String @unique
+  password String
+  dateOfBirth DateTime
+  contact Int
+  email String
+  role UserRole @relation(fields: [roleId], references: [role])
+  roleId String
+  doctor Doctor?
+  staff Staff?
+  patient Patient?
+}
+
+model Doctor {
+  id String
+  user User @relation(fields: [id], references: [id])
+  qualification String
+  specilization String
+  experience String
+  patients AdmitPatient[]
+  schedules DoctorSchedule[]
+  appointments Appointment[]
+  testReports TestReport[]
+}
+
+model Staff {
+  id String
+  user User @relation(fields: [id], references: [id])
+  qualification String
+  specilization String
+  schedules StaffSchedule[]
+}
+
+model Patient {
+  id String
+  user User @relation(fields: [id], references: [id])
+  city String
+  address String
+  admitPatient AdmitPatient?
+  insurance Insurance[]
+  appointments Appointment[]
+  testReports TestReport[]
+  bills Bill[]
+}
+
+model AdmitPatient {
+  id String
+  patient Patient @relation(fields: [id], references: [id])
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+  doctorId String
+  ward Ward @relation(fields: [wardId], references: [id])
+  wardId String
+  room Room @relation(fields: [roomId], references: [id])
+  roomId String
+  bed Bed @relation(fields: [bedId], references: [id])
+  bedId String
+  date DateTime
+  desease String
+  status String
+}
+
+model Ward {
+  id String @id @default(uuid())
+  name String @unique
+  description String
+  rooms Room[]
+  patients AdmitPatient[]
+  schedules StaffSchedule[]
+}
+
+model Room {
+  id String @id @default(uuid())
+  roomNo String @unique
+  ward Ward @relation(fields: [wardId], references: [id])
+  wardId String
+  description String
+  beds Bed[]
+  patients AdmitPatient[]
+  schedules StaffSchedule[]
+}
+
+model Bed {
+  id String @id @default(uuid())
+  bedNo String @unique
+  room Room @relation(fields: [roomId], references: [id])
+  roomId String
+  description String
+  patient AdmitPatient?
+}
+
+model Medicine {
+  id String @id @default(uuid())
+  name String
+  companyName String
+  price Int
+  status String
+  description String
+}
+
+model Insurance {
+  id String @id @default(uuid())
+  name String
+  companyName String
+  patient Patient @relation(fields: [patientId], references: [id])
+  patientId String
+  amount Int
+  endDate DateTime
+}
+
+model DoctorSchedule {
+  id String @id @default(uuid())
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+  doctorId String
+  date DateTime
+  timing String
+  city String
+  address String
+}
+
+model StaffSchedule {
+  id String @id @default(uuid())
+  staff Staff @relation(fields: [staffId], references: [id])
+  staffId String
+  date DateTime
+  timing String
+  ward Ward @relation(fields: [wardId], references: [id])
+  wardId String
+  room Room @relation(fields: [roomId], references: [id])
+  roomId String
+}
+
+model Appointment {
+  id String @id @default(uuid())
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+  doctorId String
+  patient Patient @relation(fields: [patientId], references: [id])
+  patientId String
+  date DateTime
+  allergy String
+}
+
+// need to make changes
+model Prescription {
+  id String @id @default(uuid())
+  name String
+  date DateTime
+  prescription String
+}
+
+model TestReport {
+  id String @id @default(uuid())
+  patient Patient @relation(fields: [patientId], references: [id])
+  patientId String
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+  doctorId String
+  date DateTime
+  testReport String
+  description String
+}
+
+model Bill {
+  id String @id @default(uuid())
+  patient Patient @relation(fields: [patientId], references: [id])
+  patientId String
+  amount Int
+  status String
+  description String
+}
