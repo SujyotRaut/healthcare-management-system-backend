@@ -1,9 +1,4 @@
 -- CreateTable
-CREATE TABLE "UserRole" (
-    "role" TEXT NOT NULL
-);
-
--- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "firstName" TEXT NOT NULL,
@@ -11,10 +6,9 @@ CREATE TABLE "User" (
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "dateOfBirth" DATETIME NOT NULL,
-    "contact" INTEGER NOT NULL,
+    "contact" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "roleId" TEXT NOT NULL,
-    CONSTRAINT "User_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "UserRole" ("role") ON DELETE RESTRICT ON UPDATE CASCADE
+    "role" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -30,7 +24,7 @@ CREATE TABLE "Doctor" (
 CREATE TABLE "Staff" (
     "id" TEXT NOT NULL,
     "qualification" TEXT NOT NULL,
-    "specilization" TEXT NOT NULL,
+    "experience" TEXT NOT NULL,
     CONSTRAINT "Staff_id_fkey" FOREIGN KEY ("id") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -171,9 +165,6 @@ CREATE TABLE "Bill" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserRole_role_key" ON "UserRole"("role");
-
--- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
@@ -198,4 +189,4 @@ CREATE UNIQUE INDEX "Ward_name_key" ON "Ward"("name");
 CREATE UNIQUE INDEX "Room_roomNo_key" ON "Room"("roomNo");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Bed_bedNo_key" ON "Bed"("bedNo");
+CREATE UNIQUE INDEX "Bed_bedNo_roomId_key" ON "Bed"("bedNo", "roomId");
