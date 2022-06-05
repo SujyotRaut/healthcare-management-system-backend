@@ -16,7 +16,7 @@ model User {
   lastName    String
   username    String   @unique
   password    String
-  dateOfBirth DateTime
+  dateOfBirth String
   contact     String
   email       String
   role        String
@@ -51,24 +51,23 @@ model Patient {
   city         String
   address      String
   admitPatient AdmitPatient?
-  insurance    Insurance[]
   appointments Appointment[]
   testReports  TestReport[]
   bills        Bill[]
 }
 
 model AdmitPatient {
-  id       String   @unique
-  patient  Patient  @relation(fields: [id], references: [id])
-  doctor   Doctor   @relation(fields: [doctorId], references: [id])
+  id       String  @unique
+  patient  Patient @relation(fields: [id], references: [id])
+  doctor   Doctor  @relation(fields: [doctorId], references: [id])
   doctorId String
-  ward     Ward     @relation(fields: [wardId], references: [id])
+  ward     Ward    @relation(fields: [wardId], references: [id])
   wardId   String
-  room     Room     @relation(fields: [roomId], references: [id])
+  room     Room    @relation(fields: [roomId], references: [id])
   roomId   String
-  bed      Bed      @relation(fields: [bedId], references: [id])
-  bedId    String   @unique
-  date     DateTime
+  bed      Bed     @relation(fields: [bedId], references: [id])
+  bedId    String  @unique
+  date     String
   desease  String
   status   String
 }
@@ -100,8 +99,6 @@ model Bed {
   roomId      String
   description String
   patient     AdmitPatient?
-
-  @@unique([bedNo, roomId])
 }
 
 model Medicine {
@@ -114,62 +111,61 @@ model Medicine {
 }
 
 model Insurance {
-  id          String   @id @default(uuid())
+  id          String @id @default(uuid())
   name        String
   companyName String
-  patient     Patient  @relation(fields: [patientId], references: [id])
-  patientId   String
+  patientName String
   amount      Int
-  endDate     DateTime
+  endDate     String
 }
 
 model DoctorSchedule {
-  id       String   @id @default(uuid())
-  doctor   Doctor   @relation(fields: [doctorId], references: [id])
+  id       String @id @default(uuid())
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
   doctorId String
-  date     DateTime
+  date     String
   timing   String
   city     String
   address  String
 }
 
 model StaffSchedule {
-  id      String   @id @default(uuid())
-  staff   Staff    @relation(fields: [staffId], references: [id])
+  id      String @id @default(uuid())
+  staff   Staff  @relation(fields: [staffId], references: [id])
   staffId String
-  date    DateTime
+  date    String
   timing  String
-  ward    Ward     @relation(fields: [wardId], references: [id])
+  ward    Ward   @relation(fields: [wardId], references: [id])
   wardId  String
-  room    Room     @relation(fields: [roomId], references: [id])
+  room    Room   @relation(fields: [roomId], references: [id])
   roomId  String
 }
 
 model Appointment {
-  id        String   @id @default(uuid())
-  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  id        String  @id @default(uuid())
+  doctor    Doctor  @relation(fields: [doctorId], references: [id])
   doctorId  String
-  patient   Patient  @relation(fields: [patientId], references: [id])
+  patient   Patient @relation(fields: [patientId], references: [id])
   patientId String
-  date      DateTime
+  date      String
   allergy   String
 }
 
 // need to make changes
 model Prescription {
-  id           String   @id @default(uuid())
+  id           String @id @default(uuid())
   name         String
-  date         DateTime
+  date         String
   prescription String
 }
 
 model TestReport {
-  id          String   @id @default(uuid())
-  patient     Patient  @relation(fields: [patientId], references: [id])
+  id          String  @id @default(uuid())
+  patient     Patient @relation(fields: [patientId], references: [id])
   patientId   String
-  doctor      Doctor   @relation(fields: [doctorId], references: [id])
+  doctor      Doctor  @relation(fields: [doctorId], references: [id])
   doctorId    String
-  date        DateTime
+  date        String
   testReport  String
   description String
 }

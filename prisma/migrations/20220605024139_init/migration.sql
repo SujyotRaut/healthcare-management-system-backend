@@ -5,7 +5,7 @@ CREATE TABLE "User" (
     "lastName" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "dateOfBirth" DATETIME NOT NULL,
+    "dateOfBirth" TEXT NOT NULL,
     "contact" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "role" TEXT NOT NULL
@@ -43,7 +43,7 @@ CREATE TABLE "AdmitPatient" (
     "wardId" TEXT NOT NULL,
     "roomId" TEXT NOT NULL,
     "bedId" TEXT NOT NULL,
-    "date" DATETIME NOT NULL,
+    "date" TEXT NOT NULL,
     "desease" TEXT NOT NULL,
     "status" TEXT NOT NULL,
     CONSTRAINT "AdmitPatient_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "Doctor" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -95,7 +95,7 @@ CREATE TABLE "Insurance" (
     "companyName" TEXT NOT NULL,
     "patientId" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
-    "endDate" DATETIME NOT NULL,
+    "endDate" TEXT NOT NULL,
     CONSTRAINT "Insurance_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -103,7 +103,7 @@ CREATE TABLE "Insurance" (
 CREATE TABLE "DoctorSchedule" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "doctorId" TEXT NOT NULL,
-    "date" DATETIME NOT NULL,
+    "date" TEXT NOT NULL,
     "timing" TEXT NOT NULL,
     "city" TEXT NOT NULL,
     "address" TEXT NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE "DoctorSchedule" (
 CREATE TABLE "StaffSchedule" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "staffId" TEXT NOT NULL,
-    "date" DATETIME NOT NULL,
+    "date" TEXT NOT NULL,
     "timing" TEXT NOT NULL,
     "wardId" TEXT NOT NULL,
     "roomId" TEXT NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE "Appointment" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "doctorId" TEXT NOT NULL,
     "patientId" TEXT NOT NULL,
-    "date" DATETIME NOT NULL,
+    "date" TEXT NOT NULL,
     "allergy" TEXT NOT NULL,
     CONSTRAINT "Appointment_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "Doctor" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Appointment_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
@@ -138,7 +138,7 @@ CREATE TABLE "Appointment" (
 CREATE TABLE "Prescription" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "date" DATETIME NOT NULL,
+    "date" TEXT NOT NULL,
     "prescription" TEXT NOT NULL
 );
 
@@ -147,7 +147,7 @@ CREATE TABLE "TestReport" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "patientId" TEXT NOT NULL,
     "doctorId" TEXT NOT NULL,
-    "date" DATETIME NOT NULL,
+    "date" TEXT NOT NULL,
     "testReport" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     CONSTRAINT "TestReport_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "Doctor" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,

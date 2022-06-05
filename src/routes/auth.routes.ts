@@ -10,7 +10,7 @@ export const admin: RequestHandler = async (req, res) => {
   if (isUserExist) return res.json({ status: 'fail', message: 'Username already exist' });
   const user = await prisma.user.create({ data: { ...other, role: 'admin' } });
   const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
-  res.json({ staus: 'success', data: { accessToken: token } });
+  res.json({ status: 'success', data: { accessToken: token } });
 };
 
 export const login: RequestHandler = async (req, res) => {
@@ -19,7 +19,7 @@ export const login: RequestHandler = async (req, res) => {
   if (!user || user.password !== password)
     return res.json({ status: 'fail', message: 'Uesrname or passsword is invalid' });
   const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
-  res.json({ staus: 'success', data: { accessToken: token } });
+  res.json({ status: 'success', data: { accessToken: token } });
 };
 
 export const register: RequestHandler = async (req, res) => {
@@ -29,5 +29,5 @@ export const register: RequestHandler = async (req, res) => {
   const user = await prisma.user.create({ data: { ...other, role: 'patient' } });
   await prisma.patient.create({ data: { id: user.id, city, address } });
   const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
-  res.json({ staus: 'success', data: { accessToken: token } });
+  res.json({ status: 'success', data: { accessToken: token } });
 };

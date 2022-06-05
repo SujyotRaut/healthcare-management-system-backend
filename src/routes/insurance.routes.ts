@@ -1,16 +1,11 @@
-import { Bed, Doctor, Medicine, Patient, PrismaClient, Room, Staff, User, Ward } from '@prisma/client';
+import { Bed, Doctor, Insurance, Medicine, Patient, PrismaClient, Room, Staff, User, Ward } from '@prisma/client';
 import { RequestHandler } from 'express';
 
 const prisma = new PrismaClient();
 
 export const getInsurances: RequestHandler = async (req, res) => {
-  const insurance = await prisma.insurance.findMany();
-  const rooms1 = insurance.map(async ({ patientId, ...other }) => {
-    const { firstName } = (await prisma.user.findUnique({ where: { id: patientId } }))!;
-    return { ...other, name: firstName };
-  });
-
-  res.json({ status: 'success', data: { insurances: rooms1 } });
+  const insurances = await prisma.insurance.findMany();
+  res.json({ status: 'success', data: { insurances } });
 };
 
 export const getInsurance: RequestHandler = async (req, res) => {
@@ -20,9 +15,9 @@ export const getInsurance: RequestHandler = async (req, res) => {
 };
 
 export const addInsurance: RequestHandler = async (req, res) => {
-  const { id, ...other }: Medicine = req.body;
-  const medicine = await prisma.medicine.create({ data: other });
-  res.json({ status: 'success', data: { medicine } });
+  const { id, ...other }: Insurance & { patientName: string } = req.body;
+  const insurance = await prisma.insurance.create({ data: { ...other } });
+  res.json({ status: 'success', data: { insurance } });
 };
 
 export const updateInsurance: RequestHandler = async (req, res) => {

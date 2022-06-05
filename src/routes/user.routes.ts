@@ -5,10 +5,11 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 const prisma = new PrismaClient();
 
 export const me: RequestHandler = async (req, res) => {
-  res.json(
-    await prisma.user.findUnique({
-      where: { id: res.locals.userId },
-      include: { doctor: true, patient: true, staff: true },
-    })
-  );
+  if (!res.locals.user) return res.json({ status: 'fail', message: 'Unautherized' });
+  res.json({ status: 'success', data: { me: res.locals.user } });
+};
+
+export const getUsers: RequestHandler = async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.json({ status: 'success', data: { users } });
 };

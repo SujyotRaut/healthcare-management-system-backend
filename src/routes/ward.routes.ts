@@ -4,7 +4,7 @@ import { RequestHandler } from 'express';
 const prisma = new PrismaClient();
 
 export const getWards: RequestHandler = async (req, res) => {
-  const wards = await prisma.user.findMany();
+  const wards = await prisma.ward.findMany();
   res.json({ status: 'success', data: { wards } });
 };
 
