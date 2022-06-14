@@ -14,8 +14,8 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Doctor" (
     "id" TEXT NOT NULL,
-    "qualification" TEXT NOT NULL,
-    "specilization" TEXT NOT NULL,
+    "qualifications" TEXT NOT NULL,
+    "specialization" TEXT NOT NULL,
     "experience" TEXT NOT NULL,
     CONSTRAINT "Doctor_id_fkey" FOREIGN KEY ("id") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -93,10 +93,9 @@ CREATE TABLE "Insurance" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "companyName" TEXT NOT NULL,
-    "patientId" TEXT NOT NULL,
+    "patientName" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
-    "endDate" TEXT NOT NULL,
-    CONSTRAINT "Insurance_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "endDate" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -187,6 +186,3 @@ CREATE UNIQUE INDEX "Ward_name_key" ON "Ward"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Room_roomNo_key" ON "Room"("roomNo");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Bed_bedNo_roomId_key" ON "Bed"("bedNo", "roomId");

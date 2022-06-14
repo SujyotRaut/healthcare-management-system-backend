@@ -1,34 +1,18 @@
-import { Bed, Doctor, Medicine, Patient, PrismaClient, Room, Staff, User, Ward } from '@prisma/client';
-import { RequestHandler } from 'express';
+import express from 'express';
+import {
+  addMedicine,
+  deleteMedicine,
+  getMedicine,
+  getMedicines,
+  updateMedicine,
+} from '../controllers/medicine.controllers';
 
-const prisma = new PrismaClient();
+const medicineRouter = express.Router();
 
-export const getMedicines: RequestHandler = async (req, res) => {
-  const medicines = await prisma.medicine.findMany();
-  res.json({ status: 'success', data: { medicines } });
-};
+medicineRouter.get('/', getMedicines);
+medicineRouter.get('/:id', getMedicine);
+medicineRouter.post('/', addMedicine);
+medicineRouter.put('/:id', updateMedicine);
+medicineRouter.delete('/:id', deleteMedicine);
 
-export const getMedicine: RequestHandler = async (req, res) => {
-  const medicine = await prisma.medicine.findUnique({ where: { id: req.body.id } });
-  if (!medicine) return res.json({ status: 'fail', message: 'Medicine does not exist' });
-  res.json({ status: 'success', data: { medicine } });
-};
-
-export const addMedicine: RequestHandler = async (req, res) => {
-  const { id, ...other }: Medicine = req.body;
-  const medicine = await prisma.medicine.create({ data: other });
-  res.json({ status: 'success', data: { medicine } });
-};
-
-export const updateMedicine: RequestHandler = async (req, res) => {
-  const { id, ...other }: Medicine = req.body;
-  const medicine = await prisma.medicine.update({ where: { id }, data: other });
-  res.json({ status: 'success', data: { medicine } });
-};
-
-export const deleteMedicine: RequestHandler = async (req, res) => {
-  const isWardExist = await prisma.medicine.findUnique({ where: { id: req.body.id } });
-  if (!isWardExist) return res.json({ status: 'fail', message: 'Medicine does not exist' });
-  await prisma.medicine.delete({ where: { id: req.body.id } });
-  res.json({ status: 'success', data: {} });
-};
+export default medicineRouter;

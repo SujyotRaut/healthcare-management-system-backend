@@ -11,10 +11,10 @@ const auth: RequestHandler = async (req, res, next) => {
   try {
     const token = jwt.verify(accessToken, process.env.JWT_SECRET!) as JwtPayload;
     const user = await prisma.user.findUnique({ where: { id: token.userId } });
-    if (!user) return res.json({ status: 'fail', message: 'User does not exist' });
+    if (!user) return res.json({ status: 'fail', message: 'Unauthorized' });
     res.locals.user = user;
   } catch (error) {
-    console.log(error);
+    return res.json({ status: 'fail', message: 'Unauthorized' });
   }
 
   next();

@@ -1,90 +1,33 @@
-import exprss from 'express';
 import cores from 'cors';
-import jwt from 'jsonwebtoken';
-import { Patient, PrismaClient, User } from '@prisma/client';
-import { admin, login, register } from './src/routes/auth.routes';
-import { getUsers, me } from './src/routes/user.routes';
-import auth from './src/middlewares/auth.middleware';
-import { addDoctor, deleteDoctor, getDoctor, getDoctors, updateDoctor } from './src/routes/doctor.routes';
-import { addStaff, deleteStaff, getStaff, getStaffs, updateStaff } from './src/routes/staff.routes';
-import { addWard, deleteWard, getWard, getWards, updateWard } from './src/routes/ward.routes';
-import { addRoom, deleteRoom, getRoom, getRooms, updateRoom } from './src/routes/room.routes';
-import { addBed, deleteBed, getBed, getBeds, updateBed } from './src/routes/bed.routes';
-import { addMedicine, deleteMedicine, getMedicine, getMedicines, updateMedicine } from './src/routes/medicine.routes';
-import { addInsurance, deleteInsurance, getInsurance, getInsurances, updateInsurance } from './src/routes/insurance.routes';
-import { addDoctorSchedule, getDoctorSchedules } from './src/routes/doctor-shcedule.routes';
+import express from 'express';
+import auth from './src/middleware/auth.middleware';
+import bedRouter from './src/routes/bed.routes';
+import doctorRouter from './src/routes/doctor.routes';
+import insuranceRouter from './src/routes/insurance.routes';
+import medicineRouter from './src/routes/medicine.routes';
+import roomRouter from './src/routes/room.routes';
+import staffRouter from './src/routes/staff.routes';
+import userRouter from './src/routes/user.routes';
+import wardRouter from './src/routes/ward.routes';
 
-const app = exprss();
+const app = express();
 const port = process.env.PORT || 4000;
-const prisma = new PrismaClient();
 
-app.use(exprss.json());
-app.use(exprss.urlencoded({ extended: false }));
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cores({ origin: '*' }));
-app.use(auth);
+
+// Routers
+app.use('/users', userRouter);
+app.use('/doctors', auth, doctorRouter);
+app.use('/staff', auth, staffRouter);
+app.use('/wards', auth, wardRouter);
+app.use('/rooms', auth, roomRouter);
+app.use('/beds', auth, bedRouter);
+app.use('/medicines', auth, medicineRouter);
+app.use('/insurance', auth, insuranceRouter);
 
 app.get('/', (req, res) => res.send('Server is up & running!'));
 
-// Autherization Routes
-app.get('/me', me);
-app.get('/users', getUsers);
-app.post('/login', login);
-app.post('/register', register);
-app.post('/admin', admin);
-
-// Doctor Routes
-app.get('/doctors', getDoctors);
-app.get('/doctor', getDoctor);
-app.put('/doctor', addDoctor);
-app.post('/doctor', updateDoctor);
-app.delete('/doctor', deleteDoctor);
-
-// Staff Routes
-app.get('/staffs', getStaffs);
-app.get('/staff', getStaff);
-app.put('/staff', addStaff);
-app.post('/staff', updateStaff);
-app.delete('/staff', deleteStaff);
-
-// Ward Routes
-app.get('/wards', getWards);
-app.get('/ward', getWard);
-app.put('/ward', addWard);
-app.post('/ward', updateWard);
-app.delete('/ward', deleteWard);
-
-// Room Routes
-app.get('/rooms', getRooms);
-app.get('/room', getRoom);
-app.put('/room', addRoom);
-app.post('/room', updateRoom);
-app.delete('/room', deleteRoom);
-
-// Bed Routes
-app.get('/beds', getBeds);
-app.get('/bed', getBed);
-app.put('/bed', addBed);
-app.post('/bed', updateBed);
-app.delete('/bed', deleteBed);
-
-// Medicine Routes
-app.get('/medicines', getMedicines);
-app.get('/medicine', getMedicine);
-app.put('/medicine', addMedicine);
-app.post('/medicine', updateMedicine);
-app.delete('/medicine', deleteMedicine);
-
-// Insurance Routes
-app.get('/insurances', getInsurances);
-app.get('/insurance', getInsurance);
-app.put('/insurance', addInsurance);
-app.post('/insurance', updateInsurance);
-app.delete('/insurance', deleteInsurance);
-
-// Schedule Routes
-app.get('/doctor-schedules', getDoctorSchedules);
-app.put('/doctor-schedule', addDoctorSchedule);
-
-app.listen(port, () => {
-  console.log(`http://localhost:${port}`);
-});
+app.listen(port, () => console.log(`http://localhost:${port}`));

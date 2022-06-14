@@ -1,15 +1,14 @@
-import { Patient, PrismaClient, User } from '@prisma/client';
-import { RequestHandler } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import express from 'express';
+import { getUsers, login, me, registerAdmin, registerPatient } from '../controllers/user.controllers';
+import auth from '../middleware/auth.middleware';
+import checkAdmin from '../middleware/checkAdmin.middleware';
 
-const prisma = new PrismaClient();
+const userRouter = express.Router();
 
-export const me: RequestHandler = async (req, res) => {
-  if (!res.locals.user) return res.json({ status: 'fail', message: 'Unautherized' });
-  res.json({ status: 'success', data: { me: res.locals.user } });
-};
+userRouter.get('/me', auth, me);
+userRouter.get('/', auth, checkAdmin, getUsers);
+userRouter.post('/login', login);
+userRouter.post('/register-admin', registerAdmin);
+userRouter.post('/register-patient', registerPatient);
 
-export const getUsers: RequestHandler = async (req, res) => {
-  const users = await prisma.user.findMany();
-  res.json({ status: 'success', data: { users } });
-};
+export default userRouter;

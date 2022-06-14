@@ -26,15 +26,15 @@ model User {
 }
 
 model Doctor {
-  id            String           @unique
-  user          User             @relation(fields: [id], references: [id])
-  qualification String
-  specilization String
-  experience    String
-  patients      AdmitPatient[]
-  schedules     DoctorSchedule[]
-  appointments  Appointment[]
-  testReports   TestReport[]
+  id             String           @unique
+  user           User             @relation(fields: [id], references: [id])
+  qualifications String
+  specialization String
+  experience     String
+  patients       AdmitPatient[]
+  schedules      DoctorSchedule[]
+  appointments   Appointment[]
+  testReports    TestReport[]
 }
 
 model Staff {

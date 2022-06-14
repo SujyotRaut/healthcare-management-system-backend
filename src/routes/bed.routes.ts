@@ -1,39 +1,13 @@
-import { Bed, Doctor, Patient, PrismaClient, Room, Staff, User, Ward } from '@prisma/client';
-import { RequestHandler } from 'express';
+import express from 'express';
+import { addBed, deleteBed, getBed, getBeds, updateBed } from '../controllers/bed.controllers';
+import checkAdmin from '../middleware/checkAdmin.middleware';
 
-const prisma = new PrismaClient();
+const bedRouter = express.Router();
 
-export const getBeds: RequestHandler = async (req, res) => {
-  const beds = await prisma.bed.findMany({ include: { room: true } });
-  const beds1 = beds.map(({ room: { roomNo }, ...other }) => ({ ...other, roomNo }));
-  res.json({ status: 'success', data: { beds: beds1 } });
-};
+bedRouter.get('/', getBeds);
+bedRouter.get('/:id', getBed);
+bedRouter.post('/', checkAdmin, addBed);
+bedRouter.put('/:id', checkAdmin, updateBed);
+bedRouter.delete('/:id', checkAdmin, deleteBed);
 
-export const getBed: RequestHandler = async (req, res) => {
-  const bed = await prisma.bed.findUnique({ where: { id: req.body.id }, include: { room: true } });
-  if (!bed) return res.json({ status: 'fail', message: 'Bed does not exist' });
-  const { room, ...other } = bed;
-  res.json({ status: 'success', data: { bed: { ...other, roomNo: room.roomNo } } });
-};
-
-export const addBed: RequestHandler = async (req, res) => {
-  const { id, roomId, roomNo, ...other }: Bed & { roomNo: string } = req.body;
-  const isWardExist = await prisma.bed.findFirst({ where: { AND: [{ bedNo: other.bedNo }, { room: { roomNo } }] } });
-  console.log(isWardExist);
-  if (isWardExist) return res.json({ status: 'fail', message: 'Bed already exist' });
-  const bed = await prisma.bed.create({ data: { ...other, room: { connect: { roomNo } } } });
-  res.json({ status: 'success', data: { bed } });
-};
-
-export const updateBed: RequestHandler = async (req, res) => {
-  const { id, roomId, roomNo, ...other }: Bed & { roomNo: string } = req.body;
-  const bed = await prisma.bed.update({ where: { id }, data: { ...other, room: { connect: { roomNo } } } });
-  res.json({ status: 'success', data: { bed } });
-};
-
-export const deleteBed: RequestHandler = async (req, res) => {
-  const isWardExist = await prisma.bed.findUnique({ where: { id: req.body.id } });
-  if (!isWardExist) return res.json({ status: 'fail', message: 'Bed does not exist' });
-  await prisma.bed.delete({ where: { id: req.body.id } });
-  res.json({ status: 'success', data: {} });
-};
+export default bedRouter;
