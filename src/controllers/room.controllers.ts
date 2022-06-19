@@ -19,7 +19,7 @@ export const getRoom: RequestHandler = async (req, res) => {
 export const addRoom: RequestHandler = async (req, res) => {
   const { id, wardId, wardName, ...other }: Room & { wardName: string } = req.body;
   const isRoomExist = await prisma.room.findUnique({ where: { roomNo: other.roomNo } });
-  if (isRoomExist) return res.json({ status: 'fail', message: 'Ward already exist' });
+  if (isRoomExist) return res.json({ status: 'fail', message: 'Room already exist' });
   const room = await prisma.room.create({ data: { ...other, ward: { connect: { name: wardName } } } });
   res.json({ status: 'success', data: { room } });
 };

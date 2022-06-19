@@ -23,7 +23,7 @@ CREATE TABLE "Doctor" (
 -- CreateTable
 CREATE TABLE "Staff" (
     "id" TEXT NOT NULL,
-    "qualification" TEXT NOT NULL,
+    "qualifications" TEXT NOT NULL,
     "experience" TEXT NOT NULL,
     CONSTRAINT "Staff_id_fkey" FOREIGN KEY ("id") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

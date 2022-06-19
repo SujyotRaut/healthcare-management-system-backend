@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 const auth: RequestHandler = async (req, res, next) => {
   const accessToken = req.headers['authorization']?.split(' ')[1] || '';
-  if (!accessToken) return next();
+  if (!accessToken) return res.json({ status: 'fail', message: 'Unauthorized' });
 
   try {
     const token = jwt.verify(accessToken, process.env.JWT_SECRET!) as JwtPayload;

@@ -17,18 +17,18 @@ export const getStaff: RequestHandler = async (req, res) => {
 };
 
 export const addStaff: RequestHandler = async (req, res) => {
-  const { id, role, experience, qualification, ...other }: User & Staff = req.body;
+  const { id, role, experience, qualifications, ...other }: User & Staff = req.body;
   const isUserNameExist = await prisma.user.findUnique({ where: { username: other.username } });
   if (isUserNameExist) return res.json({ status: 'fail', message: 'Username already exist' });
   const user = await prisma.user.create({ data: { ...other, role: 'staff' } });
-  const staff = await prisma.staff.create({ data: { id: user.id, experience, qualification } });
+  const staff = await prisma.staff.create({ data: { id: user.id, experience, qualifications } });
   res.json({ status: 'success', data: { staff: { ...staff, ...user } } });
 };
 
 export const updateStaff: RequestHandler = async (req, res) => {
-  const { id, role, username, experience, qualification, ...other }: User & Staff = req.body;
+  const { id, role, username, experience, qualifications, ...other }: User & Staff = req.body;
   const user = await prisma.user.update({ where: { id: req.params.id }, data: { ...other } });
-  const staff = await prisma.staff.update({ where: { id: req.params.id }, data: { experience, qualification } });
+  const staff = await prisma.staff.update({ where: { id: req.params.id }, data: { experience, qualifications } });
   res.json({ status: 'success', data: { staff: { ...staff, ...user } } });
 };
 

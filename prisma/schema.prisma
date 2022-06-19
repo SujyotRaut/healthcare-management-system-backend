@@ -38,11 +38,11 @@ model Doctor {
 }
 
 model Staff {
-  id            String          @unique
-  user          User            @relation(fields: [id], references: [id])
-  qualification String
-  experience    String
-  schedules     StaffSchedule[]
+  id             String          @unique
+  user           User            @relation(fields: [id], references: [id])
+  qualifications String
+  experience     String
+  schedules      StaffSchedule[]
 }
 
 model Patient {

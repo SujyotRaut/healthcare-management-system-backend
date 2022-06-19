@@ -42,3 +42,23 @@ export const deleteDoctor: RequestHandler = async (req, res) => {
   await prisma.user.delete({ where: { id: req.params.id } });
   res.json({ status: 'success', data: {} });
 };
+
+export const deleteDoctors: RequestHandler = async (req, res) => {
+  const ids = req.query.ids;
+  if (!ids) {
+    await prisma.doctor.deleteMany();
+    await prisma.user.deleteMany({ where: { role: 'doctor' } });
+    return res.json({ status: 'success', data: {} });
+  }
+
+  const q = ids.toString().split(',');
+  await prisma.doctor.deleteMany({ where: { id: { in: q } } });
+  await prisma.user.deleteMany({ where: { AND: [{ role: 'doctor', id: { in: q } }] } });
+  return res.json({ status: 'success', data: {} });
+};
+
+export const deleteAllDoctors: RequestHandler = async (req, res) => {
+  await prisma.doctor.deleteMany();
+  await prisma.user.deleteMany({ where: { role: 'doctor' } });
+  res.json({ status: 'success', data: {} });
+};

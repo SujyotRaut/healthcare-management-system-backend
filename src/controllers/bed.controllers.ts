@@ -19,7 +19,6 @@ export const getBed: RequestHandler = async (req, res) => {
 export const addBed: RequestHandler = async (req, res) => {
   const { id, roomId, roomNo, ...other }: Bed & { roomNo: string } = req.body;
   const isBedExist = await prisma.bed.findFirst({ where: { AND: [{ bedNo: other.bedNo }, { room: { roomNo } }] } });
-  console.log(isBedExist);
   if (isBedExist) return res.json({ status: 'fail', message: 'Bed already exist' });
   const bed = await prisma.bed.create({ data: { ...other, room: { connect: { roomNo } } } });
   res.json({ status: 'success', data: { bed } });
